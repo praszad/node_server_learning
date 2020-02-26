@@ -27,8 +27,14 @@ async function createContact(req, res) {
 }
 async function deleteContactCategory(req, res) {
   try {
-    const response = await ContactCategory.deleteMany({});
-    res.send(response);
+    const query = req.body;
+    if (query.delete) {
+      const response = await ContactCategory.deleteMany({});
+
+      res.send(response);
+      return;
+    }
+    res.send('Delete Key Missing');
   } catch (error) {
     res.send(error);
   }

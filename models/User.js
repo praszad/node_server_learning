@@ -1,6 +1,4 @@
-const {
-  imports: { mongoose }
-} = require('./imports');
+const mongoose = require('mongoose');
 const UserSchema = mongoose.Schema({
   _id: {
     type: String,

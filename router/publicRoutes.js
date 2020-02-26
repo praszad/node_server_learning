@@ -3,9 +3,11 @@ const {
   fetchAllUsers,
   createUser,
   validateUser,
-  deleteUser
+  deleteUser,
+  verifyToken
 } = require('../controllers/publicController');
 
+Router.post('/verifyToken', verifyToken);
 Router.delete('/deleteAll', deleteUser);
 Router.post('/signup', createUser);
 Router.post('/login', validateUser);

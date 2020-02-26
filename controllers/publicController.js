@@ -1,5 +1,4 @@
-const config = require('dotenv').config;
-config();
+require('dotenv').config();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -45,17 +44,29 @@ async function validateUser(req, res) {
     const dbPassword = user[0].password;
     const isValid = await bcrypt.compare(query.password, dbPassword);
     if (isValid) {
-      const token = await jwt.sign(
-        { data: user[0] },
-        process.env.JWT_TOKEN_KEY
-      );
-      res.send({ token });
+      const token = newToken(user[0].email);
+      const refToken = refreshToken(user[0].email);
+      res.send({ token, refreshToken: refToken });
     }
   } catch (error) {
     res.send(error);
   }
 }
-
+function newToken(data) {
+  return jwt.sign({ data }, process.env.JWT_TOKEN_KEY, { expiresIn: '1h' });
+}
+function refreshToken(data) {
+  return jwt.sign({ data }, process.env.JWT_TOKEN_KEY, { expiresIn: '2h' });
+}
+async function verifyToken(req, res) {
+  const token = req.body.token;
+  try {
+    const isValid = await jwt.verify(token, process.env.JWT_TOKEN_KEY);
+    res.send(isValid);
+  } catch (error) {
+    res.status(200).send(error);
+  }
+}
 async function fetchAllUsers(req, res) {
   try {
     const users = await User.find({}, (err, res) => {
@@ -67,4 +78,10 @@ async function fetchAllUsers(req, res) {
   }
 }
 
-module.exports = { fetchAllUsers, createUser, deleteUser, validateUser };
+module.exports = {
+  fetchAllUsers,
+  createUser,
+  deleteUser,
+  validateUser,
+  verifyToken
+};

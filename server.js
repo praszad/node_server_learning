@@ -10,7 +10,9 @@ const {
   publicRouter,
   userRouter,
   contactRouter,
-  tourRouter
+  tourRouter,
+  actingServiceRouter,
+  newsAndEventsRouter
 } = require('./router');
 const protect = require('./router/routerProtect');
 
@@ -31,6 +33,8 @@ function startApp() {
 app.use('/api/v1', publicRouter);
 app.use('/api/v1/users', protect, userRouter);
 app.use('/api/v1/contacts', contactRouter);
-app.use('api/v1/tour', tourRouter);
+app.use('/api/v1/tour', tourRouter);
+app.use('/api/v1/actingService', actingServiceRouter);
+app.use('/api/v1/newsAndEvents', newsAndEventsRouter);
 
 module.exports = { startApp, express };

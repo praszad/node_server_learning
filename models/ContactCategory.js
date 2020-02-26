@@ -1,6 +1,4 @@
-const {
-  imports: { mongoose }
-} = require('./imports');
+const mongoose = require('mongoose');
 const ContactCategorySchema = mongoose.Schema({
   category_name: String,
   category_id: { type: String, require: true }

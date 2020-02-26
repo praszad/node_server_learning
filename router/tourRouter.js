@@ -1,5 +1,10 @@
 const Router = require('express').Router();
-const { fetchTouristPlaces } = require('../controllers/touristController');
+const {
+  fetchTouristPlaces,
+  addTouristPlace
+} = require('../controllers/touristController');
+
 Router.get('/', fetchTouristPlaces);
+Router.post('/', addTouristPlace);
 
 module.exports = Router;

@@ -1,24 +1,25 @@
-const express = require('express');
-require('dotenv').config();
-const app = express();
-const PORT = process.env.PORT || 3333;
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const connect = require('./config/connection');
-const {
+import express from 'express';
+import 'dotenv/config';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import connect from './config/connection';
+import protect from './router/routerProtect';
+import {
   publicRouter,
   userRouter,
   contactRouter,
   tourRouter,
   actingServiceRouter,
   newsAndEventsRouter
-} = require('./router');
-const protect = require('./router/routerProtect');
+} from './router';
+
+const app = express();
+const PORT = process.env.PORT || 3333;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-function startApp() {
+export default function startApp() {
   try {
     app.listen(PORT, () => {
       console.log('App Connected on Port : ', PORT);
@@ -28,12 +29,11 @@ function startApp() {
     console.log('App Start Error : ', err);
   }
 }
+const url = '/api/v1';
 //API Routing
-app.use('/api/v1', publicRouter);
-app.use('/api/v1/users', protect, userRouter);
+app.use(url, publicRouter);
+app.use(url + '/users', protect, userRouter);
 app.use('/api/v1/contacts', contactRouter);
 app.use('/api/v1/tour', tourRouter);
 app.use('/api/v1/actingService', actingServiceRouter);
 app.use('/api/v1/newsAndEvents', newsAndEventsRouter);
-
-module.exports = { startApp, express };
